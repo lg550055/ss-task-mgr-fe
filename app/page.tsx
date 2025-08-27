@@ -50,15 +50,9 @@ export default function Dashboard() {
     fetchTasks();
   };
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    router.push("/login");
-  };
-
   return (
     <div>
       <h1>Task Manager</h1>
-      <button onClick={logout}>Logout</button>
       <form onSubmit={handleSubmit}>
         <input placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
         <input placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
