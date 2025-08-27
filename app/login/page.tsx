@@ -1,11 +1,12 @@
 "use client";
-
+import { useAuth } from "../context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import api from "../../lib/api";
 
 export default function LoginPage() {
   const [form, setForm] = useState({ username: "", password: "" });
+  const { login } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -16,7 +17,9 @@ export default function LoginPage() {
       params.append("password", form.password);
 
       const res = await api.post("/token", params);
-      localStorage.setItem("token", res.data.access_token);
+
+      login(res.data.access_token);
+
       router.push("/");
     } catch (err) {
       alert("Login failed");
