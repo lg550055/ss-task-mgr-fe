@@ -1,4 +1,6 @@
 body {
+  background-color: black;
   font-family: sans-serif;
-  padding: 1rem;
+  color: aquamarine;
+  padding: 0.5rem;
 }

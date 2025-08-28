@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import api from "../lib/api";
@@ -50,6 +49,18 @@ export default function Dashboard() {
     fetchTasks();
   };
 
+  const toggleCompleted = async (task: Task) => {
+    try {
+      await api.put(`/tasks/${task.id}`, {
+        ...task,
+        completed: !task.completed,
+      });
+      fetchTasks();
+    } catch {
+      alert("Failed to update task status.");
+    }
+  };
+
   return (
     <div>
       <h1>Task Manager</h1>
@@ -58,12 +69,19 @@ export default function Dashboard() {
         <input placeholder="Description" value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} />
         <button type="submit">{editId ? "Update" : "Create"} Task</button>
       </form>
-      <ul>
+      <ul style={{ listStyle: "none", paddingLeft: 0 }}>
         {tasks.map((task) => (
           <li key={task.id}>
-            <b>{task.title}</b> - {task.description}
-            <button onClick={() => handleEdit(task)}>Edit</button>
-            <button onClick={() => handleDelete(task.id)}>Delete</button>
+            <input type="checkbox" checked={task.completed} onChange={() => toggleCompleted(task)} title="Mark completed" />
+            <span style={{
+                textDecoration: task.completed ? "line-through" : "none",
+                marginLeft: "0.5rem",
+              }}
+            >
+              <b>{task.title}</b>: {task.description}
+            </span>
+            <button onClick={() => handleEdit(task)} title="Edit Task">🖉</button>
+            <button onClick={() => handleDelete(task.id)} title="Delete Task">🗑️</button>
           </li>
         ))}
       </ul>
